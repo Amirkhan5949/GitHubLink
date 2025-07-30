@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -31,8 +32,8 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        jvmToolchain(8)
     }
 }
 
@@ -52,4 +53,30 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    //dagger_hilt
+    implementation(libs.dagger.hilt)
+    ksp(libs.dagger.compiler)
+
+    //activity_ktx
+    implementation(libs.androidx.activity.ktx)
+
+    //viewmodel
+    implementation(libs.lifecycle.viewmodel.ktx)
+
+    // liveData
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    //coroutines
+    implementation(libs.kotlinx.coroutines.android)
+
+    //retrofit
+    implementation(libs.retrofit)
+    implementation(libs.gson)
+
 }
