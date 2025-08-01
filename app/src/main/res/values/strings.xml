@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GitHubLink</string>
+    <string name="git_hub">Git Hub</string>
+    <string name="search">Search...</string>
 </resources>
