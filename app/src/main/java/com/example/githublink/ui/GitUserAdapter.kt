@@ -9,6 +9,11 @@ import com.example.githublink.databinding.ActivityGitUserItemBinding
 class GitUserAdapter(private val gitRepoList: MutableList<GitUserResponse>) :
     RecyclerView.Adapter<GitUserAdapter.GitUserViewHolder>() {
 
+    fun updateList(newList: List<GitUserResponse>) {
+        gitRepoList.clear()
+        gitRepoList.addAll(newList)
+        notifyDataSetChanged()
+    }
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
