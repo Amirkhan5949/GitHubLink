@@ -1,4 +1,4 @@
-package com.example.githublink.ui
+package com.example.githublink.ui.githublist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

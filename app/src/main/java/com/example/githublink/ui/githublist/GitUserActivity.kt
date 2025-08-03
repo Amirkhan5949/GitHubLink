@@ -1,6 +1,8 @@
-package com.example.githublink.ui
+package com.example.githublink.ui.githublist
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -13,6 +15,7 @@ import com.example.githublink.R
 import com.example.githublink.core.onTextChanged
 import com.example.githublink.core.state.ApiState
 import com.example.githublink.databinding.ActivityGitUserBinding
+import com.example.githublink.ui.githubdetail.GitHubDetail
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -56,7 +59,16 @@ class GitUserActivity : ComponentActivity() {
                     ApiState.Success -> {
                         loader.visibility = View.GONE
                         showErrorMsg.visibility = View.GONE
-                        adapter = GitUserAdapter(userViewModel.searhGitRepo.value.toMutableList())
+                        adapter = GitUserAdapter(
+                            userViewModel.searhGitRepo.value.toMutableList(),
+                            onItemClick = {
+                                Log.i("sgvdhbfnfg", "observerApiState: ${it.toString()}")
+
+                                val intent = Intent(this@GitUserActivity, GitHubDetail::class.java).apply {
+                                    putExtra(getString(R.string.repo_url),it.html_url)
+                                }
+                                startActivity(intent)
+                            })
                         rv.adapter = adapter
                         observeSearchResults()
                     }

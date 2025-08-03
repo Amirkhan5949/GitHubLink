@@ -14,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GitHubLink">
         <activity
-            android:name=".ui.GitUserActivity"
+            android:name=".ui.githubdetail.GitHubDetail"
+            android:exported="false" />
+        <activity
+            android:name=".ui.githublist.GitUserActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.GitHubLink">

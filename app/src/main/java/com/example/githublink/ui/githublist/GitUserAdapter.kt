@@ -1,4 +1,4 @@
-package com.example.githublink.ui
+package com.example.githublink.ui.githublist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.githublink.data.networkmodel.GitUserResponse
 import com.example.githublink.databinding.ActivityGitUserItemBinding
 
-class GitUserAdapter(private val gitRepoList: MutableList<GitUserResponse>) :
+class GitUserAdapter(
+    private val gitRepoList: MutableList<GitUserResponse>,
+    private val onItemClick: (GitUserResponse) -> Unit,
+) :
     RecyclerView.Adapter<GitUserAdapter.GitUserViewHolder>() {
 
     fun updateList(newList: List<GitUserResponse>) {
@@ -14,6 +17,23 @@ class GitUserAdapter(private val gitRepoList: MutableList<GitUserResponse>) :
         gitRepoList.addAll(newList)
         notifyDataSetChanged()
     }
+
+    inner class GitUserViewHolder(private val binding: ActivityGitUserItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        val tvId = binding.tvId
+        val tvUrl = binding.tvUrl
+        val tvName = binding.tvName
+
+        fun bind(user: GitUserResponse) {
+            tvUrl.text = user.html_url
+            tvId.text = user.id
+            tvName.text = user.name
+            binding.cvGhRepo.setOnClickListener {
+                onItemClick(user)
+            }
+        }
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -24,19 +44,10 @@ class GitUserAdapter(private val gitRepoList: MutableList<GitUserResponse>) :
     }
 
     override fun onBindViewHolder(holder: GitUserViewHolder, position: Int) {
-        val user = gitRepoList[position]
-        holder.tvId.text = user.id
-        holder.tvName.text = user.name
-        holder.tvUrl.text = user.html_url
+        holder.bind(gitRepoList[position])
     }
 
     override fun getItemCount(): Int = gitRepoList.size
 
-    class GitUserViewHolder(private val binding: ActivityGitUserItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        val tvId = binding.tvId
-        val tvUrl = binding.tvUrl
-        val tvName = binding.tvName
-    }
 
 }
