@@ -2,7 +2,6 @@ package com.example.githublink.ui.githublist
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -44,7 +43,6 @@ class GitUserActivity : ComponentActivity() {
         rv = binding.ghRepoList
         with(rv) {
             layoutManager = LinearLayoutManager(context)
-
         }
     }
 
@@ -62,8 +60,6 @@ class GitUserActivity : ComponentActivity() {
                         adapter = GitUserAdapter(
                             userViewModel.searhGitRepo.value.toMutableList(),
                             onItemClick = {
-                                Log.i("sgvdhbfnfg", "observerApiState: ${it.toString()}")
-
                                 val intent = Intent(this@GitUserActivity, GitHubDetail::class.java).apply {
                                     putExtra(getString(R.string.repo_url),it.html_url)
                                 }
@@ -77,7 +73,6 @@ class GitUserActivity : ComponentActivity() {
                         loader.visibility = View.GONE
                         showErrorMsg.visibility = View.VISIBLE
                         showErrorMsg.text = state.error
-
                     }
                 }
             }

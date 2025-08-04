@@ -29,7 +29,6 @@ class GitHubDetail : AppCompatActivity() {
                 binding.loader.visibility = View.GONE
             }
         }
-
         loadUrl(url)
     }
 }

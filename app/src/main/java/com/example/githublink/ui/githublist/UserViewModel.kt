@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UserViewModel @Inject constructor(val repository: UserRepository) : ViewModel() {
+class UserViewModel @Inject constructor(val repository: UserRepository,private val ghRepoListMapper: GHRepoListMapper) : ViewModel() {
 
     private val _apiState = MutableStateFlow<ApiState>(ApiState.Loading)
     val apiState: StateFlow<ApiState> = _apiState.asStateFlow()
@@ -31,7 +31,6 @@ class UserViewModel @Inject constructor(val repository: UserRepository) : ViewMo
 
     private val _searchGitRepo = MutableStateFlow<List<GitUserResponse>>(emptyList())
     val searhGitRepo: StateFlow<List<GitUserResponse>> = _searchGitRepo.asStateFlow()
-
 
     val allUserList = mutableListOf<GitUserResponse>()
 
@@ -48,8 +47,9 @@ class UserViewModel @Inject constructor(val repository: UserRepository) : ViewMo
                     is Result.Success -> {
                         _apiState.emit(ApiState.Success)
                         val users = result.data
-                        allUserList.addAll(users.items)
-                        _searchGitRepo.value = users.items
+                        val mappedData = ghRepoListMapper.map(users)
+                        allUserList.addAll(mappedData)
+                        _searchGitRepo.value = mappedData
                     }
                 }
             }
@@ -63,7 +63,7 @@ class UserViewModel @Inject constructor(val repository: UserRepository) : ViewMo
                     allUserList
                 } else {
                     allUserList.filter {
-                        it.name.contains(query, ignoreCase = true) || it.id
+                        it.name.contains(query, ignoreCase = true) || it.id.toString()
                             .contains(query)
                     }
                 }

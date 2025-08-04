@@ -26,7 +26,7 @@ class GitUserAdapter(
 
         fun bind(user: GitUserResponse) {
             tvUrl.text = user.html_url
-            tvId.text = user.id
+            tvId.text = user.id.toString()
             tvName.text = user.name
             binding.cvGhRepo.setOnClickListener {
                 onItemClick(user)
