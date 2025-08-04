@@ -2,7 +2,6 @@ package com.example.githublink.ui.githublist
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -33,19 +32,29 @@ class GitUserActivity : ComponentActivity() {
         val binding = ActivityGitUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
         userViewModel.getUser()
+        setUpUi(binding)
+        observerApiState()
+    }
+
+    private fun setUpUi(binding: ActivityGitUserBinding) {
         showErrorMsg = binding.errorMassage
         loader = binding.loader
         binding.etSearch.onTextChanged { query ->
             userViewModel.search(query)
         }
-
-        observerApiState()
-
         rv = binding.ghRepoList
         with(rv) {
             layoutManager = LinearLayoutManager(context)
-
         }
+        adapter = GitUserAdapter(
+            userViewModel.searhGitRepo.value.toMutableList(),
+            onItemClick = {
+                val intent = Intent(this@GitUserActivity, GitHubDetail::class.java).apply {
+                    putExtra(getString(R.string.repo_url), it.html_url)
+                }
+                startActivity(intent)
+            })
+        rv.adapter = adapter
     }
 
     private fun observerApiState() {
@@ -59,17 +68,6 @@ class GitUserActivity : ComponentActivity() {
                     ApiState.Success -> {
                         loader.visibility = View.GONE
                         showErrorMsg.visibility = View.GONE
-                        adapter = GitUserAdapter(
-                            userViewModel.searhGitRepo.value.toMutableList(),
-                            onItemClick = {
-                                Log.i("sgvdhbfnfg", "observerApiState: ${it.toString()}")
-
-                                val intent = Intent(this@GitUserActivity, GitHubDetail::class.java).apply {
-                                    putExtra(getString(R.string.repo_url),it.html_url)
-                                }
-                                startActivity(intent)
-                            })
-                        rv.adapter = adapter
                         observeSearchResults()
                     }
 
@@ -77,7 +75,6 @@ class GitUserActivity : ComponentActivity() {
                         loader.visibility = View.GONE
                         showErrorMsg.visibility = View.VISIBLE
                         showErrorMsg.text = state.error
-
                     }
                 }
             }
